@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+const app = require('../app');
+
+const http = require('http');
+
+const PORT = process.env.PORT || 6969;
+
+// environment setup
+const environment = process.env.NODE_ENV;
+
+const server = http.createServer(app);
+
+const mongoose = require('mongoose');
+
+mongoose.connect(
+	process.env.DB_CONNECT_URI,
+	{
+		useNewUrlParser: true,
+		useUnifiedTopology: true
+	},
+	() => {
+		console.log('connected to database');
+		server.listen(PORT, () => console.log('Server Started at port', PORT));
+	}
+);
+
+// export the server for testing
+module.exports = server;
